@@ -1,0 +1,67 @@
+<div class="row center">
+  <div class="create-item-card">
+    <div class="row">
+      <div class="col-xs-6">
+        <form [formGroup]="createItemForm" (ngSubmit)="onSubmit()">
+          <h5>Neues Item hinzufügen</h5>
+          <div class="form-group row">
+            <div class="col">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Item Name"
+                formControlName="name"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea
+              class="form-control"
+              id="description"
+              rows="3"
+              formControlName="description"
+              placeholder="Beschreibung"
+            ></textarea>
+          </div>
+          <div class="form-group row">
+            <div class="col">
+              <input
+                type="number"
+                class="form-control"
+                placeholder="Price"
+                formControlName="price"
+              />
+            </div>
+          </div>
+
+          <div class="custom-file form-control">
+            <input
+              type="file"
+              class="custom-file-input"
+              id="itemImage"
+              formControlName="imagePath"
+              (change)="onFileSelected($event)"
+            />
+            <label class="custom-file-label" for="itemImage">{{
+              fileText
+            }}</label>
+          </div>
+
+          <button
+            class="btn btn-submit"
+            type="submit"
+            [disabled]="!createItemForm.valid"
+          >
+            {{ !isEditMode ? "Erstellen" : "Aktualisieren" }}
+          </button>
+        </form>
+      </div>
+      <div class="col-xs-6">
+        <div class="img-placeholder" *ngIf="!imgURL" id="outer">
+          <span class="material-icons center-hr"> wallpaper </span>
+        </div>
+        <img [src]="imgURL" *ngIf="imgURL" />
+      </div>
+    </div>
+  </div>
+</div>

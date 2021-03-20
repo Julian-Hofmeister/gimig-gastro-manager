@@ -1,0 +1,32 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+}
+
+.my-heading {
+  font-family: 'BigJohn';
+  color: white;
+  font-size: 7rem;
+  letter-spacing: .4rem;
+
+}
+
+.gimig-heading {
+  font-size: 10rem;
+}
+
+.heading-row {
+  padding-left: 20%;
+  padding-right: 20%;
+  padding-top: 12%;
+}
+
+#logo {
+  right: 0;
+  position: relative;
+  height: 280px;
+  width: auto;
+}

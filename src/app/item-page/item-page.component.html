@@ -1,0 +1,12 @@
+<app-nav-bar></app-nav-bar>
+<app-title-element> </app-title-element>
+<app-caption-element></app-caption-element>
+<app-create-item-card></app-create-item-card>
+
+<div class="row center">
+  <app-item-item
+    *ngFor="let item of items; let i = index"
+    [item]="item"
+    [index]="i"
+  ></app-item-item>
+</div>

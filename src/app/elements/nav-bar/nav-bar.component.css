@@ -1,0 +1,44 @@
+.mainnavbar {
+  height: 80px;
+  width: 100%;
+  background-color: #262626;
+  position: relative;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin:0 auto;
+  list-style:none;
+
+}
+
+.nav-btn {
+  box-sizing: border-box;
+  color: white;
+  text-align: center;
+  display:inline;
+  text-align:center;
+  text-decoration:none;
+  padding-top: 1.7rem;
+}
+
+img {
+  left: 20%;
+  padding: 20px;
+  height: 80px;
+  width: auto;
+  display: inline-block;
+  position: absolute;
+}
+
+
+ul{
+
+  list-style: none;
+  display: inline-block;
+}
+
+.right {
+  right: 20%;
+  display: inline-block;
+  position: absolute;
+}
+

@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.btn {
+  color: white;
+  margin-right: 4rem;
+  margin-top: 4rem;
+  padding: 10px 50px;
+  border-radius: 20rem;
+}
+
+.btn-filled {
+  background-color: #ED5327;
+  padding: 11.5px 50px;
+}
+
+.btn-outlined {
+  border-color: white;
+  border-width: 3px;
+  border-style: solid;
+}
+
+.btn-row {
+  padding-left: 20%;
+}

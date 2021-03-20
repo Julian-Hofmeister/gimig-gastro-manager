@@ -1,0 +1,152 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.row {
+  justify-content: space-between;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+#outer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-item-card {
+  width: 80rem;
+  margin: 5% 0%;
+  padding: 20px 20px;
+  background-color: #484848;
+  border-radius: 15px;
+
+}
+
+h5 {
+  font-size: 16px;
+  color: white;
+  font-weight: 800;
+}
+
+.form-control {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  width: 30rem;
+}
+
+input {
+  padding-left: 10px;
+
+  background-color: #5c5c5c;
+  color: whitesmoke;
+  border-color: #5c5c5c;
+}
+
+input:focus {
+  padding-left: 10px;
+  background-color: #424242;
+  color: whitesmoke;
+  border-color: rgba(255, 127, 80, 0.514);
+  box-shadow: none !important;
+
+}
+
+::placeholder {
+  color: whitesmoke;
+  opacity: 0.8;
+
+}
+
+textarea{
+    padding-top: 7px;
+  padding-left: 10px;
+  background-color: #5c5c5c;
+  color: whitesmoke;
+  border-color: #5c5c5c;
+}
+
+textarea:focus {
+  padding-left: 10px;
+  background-color: #424242;
+  color: whitesmoke;
+  border-color: rgba(255, 127, 80, 0.514);
+  box-shadow: none !important;
+}
+
+select {
+  padding-left: 6px;
+  background-color: #5c5c5c;
+  color: whitesmoke;
+  border-color: #5c5c5c;
+}
+
+select:focus {
+  padding-left: 6px;
+  background-color: #424242;
+  color: whitesmoke;
+  border-color: rgba(255, 127, 80, 0.514);
+  box-shadow: none !important;
+}
+
+.custom-file {
+  background-color: #5c5c5c;
+  color: #5c5c5c;
+  border-color: #5c5c5c;
+}
+
+[type="file"]:focus+label {
+  background-color: #424242;
+  color: whitesmoke;
+  border-color: rgba(255, 127, 80, 0.514);
+  box-shadow: none !important;
+}
+
+
+
+label {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  background-color: #5c5c5c;
+  color: whitesmoke;
+  border-color: #5c5c5c;
+
+}
+
+.btn-submit {
+  padding: 5px 10px;
+  margin-top: 2rem;
+  background-color: coral;
+  border-radius: 5px;
+  width: 15rem;
+  color: white;
+}
+
+img {
+  width: 30rem;
+  height: 23.5rem;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.img-placeholder {
+  width: 30rem;
+  height: 23.5rem;
+  border-radius: 15px;
+  /* background-color:#5c5c5c */
+  background-color: coral
+}
+
+.material-icons {
+  font-size: 50px;
+  color: whitesmoke;
+}

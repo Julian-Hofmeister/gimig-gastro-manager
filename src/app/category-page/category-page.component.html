@@ -1,0 +1,11 @@
+<app-nav-bar pageTitle="My Gimig / Speisekarte"></app-nav-bar>
+<app-title-element></app-title-element>
+
+<app-create-category-card></app-create-category-card>
+<div class="row center">
+  <app-category-item
+    *ngFor="let category of categories; let i = index"
+    [category]="category"
+    [id]="i"
+  ></app-category-item>
+</div>
