@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/app/category-page/category.model';
 import { CategoryService } from 'src/app/category-page/category.service';
+import { ItemStorageService } from '../item-storage.service';
 import { Item } from '../item.model';
 import { ItemService } from '../item.service';
 
@@ -18,13 +19,17 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
   selectedFile = null;
   imagePath: any;
   imgURL: any;
+  id: string;
 
   editModeSub: Subscription;
   isEditMode = false;
   item: Item;
   editIndex: number;
 
-  constructor(private itemService: ItemService) {}
+  constructor(
+    private itemService: ItemService,
+    private itemStorageService: ItemStorageService
+  ) {}
 
   ngOnInit() {
     // INIT FORM
@@ -43,6 +48,7 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
     );
   }
 
+  // CHOOSE IMAGE
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
     this.fileText = this.selectedFile.name;
@@ -62,6 +68,7 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
     };
   }
 
+  // CREATE NEW ITEM
   onSubmit() {
     //LOG
     console.log(this.createItemForm);
@@ -73,19 +80,27 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
     const imagePath = this.imgURL;
     const isVisible = true;
 
-    this.item = new Item(name, description, price, imagePath, isVisible);
+    this.item = new Item(
+      name,
+      description,
+      price,
+      imagePath,
+      isVisible,
+      this.id
+    );
 
     // TAKE ACTION
     if (!this.isEditMode) {
-      this.itemService.addItem(this.item);
+      this.itemStorageService.addItem(this.item, this.itemStorageService.path);
     } else {
-      console.log(this.itemService.currentIndex);
-      this.itemService.updateItem(this.itemService.currentIndex, this.item);
+      this,
+        this.itemStorageService.updateItem(
+          this.item,
+          this.itemStorageService.path
+        );
+
       this.isEditMode = false;
     }
-
-    //LOG
-    console.log(this.itemService.getItems());
 
     //RESET
     this.imgURL = '';
@@ -94,6 +109,7 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
   }
 
   onEditMode(item: Item) {
+    // SET EDIT MODE
     this.isEditMode = true;
 
     // SET FORM
@@ -105,6 +121,7 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
     });
     this.imgURL = item.imagePath;
     this.fileText = item.imagePath;
+    this.id = item.id;
   }
 
   ngOnDestroy() {

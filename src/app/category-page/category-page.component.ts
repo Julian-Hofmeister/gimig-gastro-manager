@@ -1,7 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  DocumentData,
+} from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
+import { DataStorageService } from './data-storage.service';
 import { Category } from './category.model';
 import { CategoryService } from './category.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-page',
@@ -9,14 +16,40 @@ import { CategoryService } from './category.service';
   styleUrls: ['./category-page.component.css'],
 })
 export class CategoryPageComponent implements OnInit, OnDestroy {
-  check = false;
-  categories: Category[];
+  categories: Category[] = [];
   private categorySub: Subscription;
+  private streamSub: Subscription;
 
-  constructor(private categoryService: CategoryService) {}
+  private path = this.dataStorageService.path;
+
+  constructor(
+    private categoryService: CategoryService,
+    private dataStorageService: DataStorageService
+  ) {}
 
   ngOnInit() {
-    this.categories = this.categoryService.getCategories();
+    this.streamSub = this.dataStorageService
+      .getCategories(this.path)
+      .subscribe((categories) => {
+        // EMPTY LOCAL CATEGORIES
+        this.categories = [];
+
+        // DEFINE NEW CATEGORY
+        for (let category of categories) {
+          const fetchedCategory = new Category(
+            category.name,
+            category.hasCategories,
+            category.hasFood,
+            category.imagePath,
+            category.isVisible,
+            category.id
+          );
+
+          // PUSH NEW CATEGORY
+          this.categories.push(fetchedCategory);
+        }
+      });
+
     this.categorySub = this.categoryService.categoriesChanged.subscribe(
       (categories: Category[]) => {
         this.categories = categories;
@@ -26,5 +59,6 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.categorySub.unsubscribe();
+    this.streamSub.unsubscribe();
   }
 }

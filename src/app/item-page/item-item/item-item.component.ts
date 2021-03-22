@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ItemStorageService } from '../item-storage.service';
 import { Item } from '../item.model';
 import { ItemService } from '../item.service';
 
@@ -11,16 +12,22 @@ export class ItemItemComponent implements OnInit {
   @Input() item: Item;
   @Input() index: number;
 
-  constructor(private itemService: ItemService) {}
+  constructor(
+    private itemService: ItemService,
+    private itemStorageService: ItemStorageService
+  ) {}
 
   ngOnInit(): void {}
 
   onDeleteItem() {
-    this.itemService.deleteItem(this.index);
+    this.itemStorageService.deleteItem(this.item, this.itemStorageService.path);
   }
 
   onChangeVisibility() {
-    this.itemService.changeItemVisibilty(this.item);
+    this.itemStorageService.changeItemVisibilty(
+      this.item,
+      this.itemStorageService.path
+    );
   }
 
   onEditItem() {

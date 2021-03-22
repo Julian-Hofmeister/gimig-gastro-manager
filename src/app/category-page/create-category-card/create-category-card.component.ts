@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+} from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { DataStorageService } from 'src/app/category-page/data-storage.service';
 import { Category } from '../category.model';
 import { CategoryService } from '../category.service';
 
@@ -16,11 +21,16 @@ export class CreateCategoryCardComponent implements OnInit {
   selectedFile = null;
   imagePath: any;
   imgURL: any;
+  id: string;
 
   editModeSub: Subscription;
   isEditMode = false;
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(
+    private categoryService: CategoryService,
+    private dataStorageService: DataStorageService,
+    public afs: AngularFirestore
+  ) {}
 
   ngOnInit() {
     // INIT FORM
@@ -39,6 +49,7 @@ export class CreateCategoryCardComponent implements OnInit {
     );
   }
 
+  // CHOOSE IMAGE
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
     this.fileText = this.selectedFile.name;
@@ -58,8 +69,9 @@ export class CreateCategoryCardComponent implements OnInit {
     };
   }
 
+  // CREATE NEW CATEGORY
   onSubmit() {
-    // LOG
+    // LOG FORM
     console.log(this.createCategoryForm);
 
     // DEFINE VALUES
@@ -74,26 +86,28 @@ export class CreateCategoryCardComponent implements OnInit {
       hasCategories,
       hasFood,
       imagePath,
-      isVisible
+      isVisible,
+      this.id
     );
 
     // TAKE ACTION
-
     if (!this.isEditMode) {
-      this.categoryService.addCategory(this.category);
-    } else {
-      console.log(this.categoryService.currentIndex);
-      this.categoryService.updateCategory(
-        this.categoryService.currentIndex,
-        this.category
+      // CREATE CATEGORY
+      this.dataStorageService.addCategory(
+        this.category,
+        this.dataStorageService.path
       );
+    } else {
+      // UPDATE CATEGORY
+      this.dataStorageService.updateCategory(
+        this.category,
+        this.dataStorageService.path
+      );
+      // RESET EDIT MODE
       this.isEditMode = false;
     }
 
-    // LOG
-    console.log(this.categoryService.getCategories());
-
-    //RESET
+    //RESET FORM
     this.imgURL = '';
     this.fileText = 'Bild auswählen';
     this.createCategoryForm.reset();
@@ -114,5 +128,6 @@ export class CreateCategoryCardComponent implements OnInit {
     });
     this.imgURL = category.imagePath;
     this.fileText = category.imagePath;
+    this.id = category.id;
   }
 }

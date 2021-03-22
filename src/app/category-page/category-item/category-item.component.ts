@@ -1,5 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+} from '@angular/fire/firestore';
+import { ActivatedRoute, Data, Router } from '@angular/router';
+import { DataStorageService } from 'src/app/category-page/data-storage.service';
 import { Category } from '../category.model';
 import { CategoryService } from '../category.service';
 
@@ -14,29 +19,43 @@ export class CategoryItemComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
+    private dataStorageService: DataStorageService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public afs: AngularFirestore
   ) {}
 
   ngOnInit(): void {}
 
   onDeleteCategory() {
-    this.categoryService.deleteCategory(this.index);
+    this.dataStorageService.deleteCategory(
+      this.category,
+      this.dataStorageService.path
+    );
   }
 
   onChangeVisibility() {
-    this.categoryService.changeCategoryVisibilty(this.category);
+    this.dataStorageService.changeCategoryVisibilty(
+      this.category,
+      this.dataStorageService.path
+    );
   }
 
   onOpenContent() {
     if (this.category.hasCategories) {
-      this.router.navigate([this.category.name.toLowerCase() + '/category'], {
-        relativeTo: this.route,
+      this.router.navigateByUrl('category/category', {
+        state: { id: this.category.id },
       });
+      this.dataStorageService.path = this.dataStorageService.path
+        .doc(this.category.id)
+        .collection('categories');
+      console.log(this.dataStorageService.path);
     } else {
-      this.router.navigate([this.category.name.toLowerCase() + '/items'], {
-        relativeTo: this.route,
-      });
+      this.router.navigate(['items']);
+      this.dataStorageService.path = this.dataStorageService.path
+        .doc(this.category.id)
+        .collection('items');
+      console.log(this.dataStorageService.path);
     }
   }
 

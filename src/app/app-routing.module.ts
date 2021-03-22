@@ -10,13 +10,10 @@ const appRoutes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginPageComponent },
   { path: 'home', component: LandingPageComponent },
-  {
-    path: 'category',
-    component: CategoryPageComponent,
-  },
-  { path: 'category/:name/items', component: ItemPageComponent },
-  { path: 'category/:name/category', component: CategoryPageComponent },
+
+  { path: 'category', component: CategoryPageComponent },
   { path: 'items', component: ItemPageComponent },
+
   { path: 'elements', component: ElementsComponent },
 ];
 

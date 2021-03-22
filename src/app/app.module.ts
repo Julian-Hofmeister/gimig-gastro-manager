@@ -19,6 +19,9 @@ import { ItemPageComponent } from './item-page/item-page.component';
 import { CaptionElementComponent } from './caption-element/caption-element.component';
 import { CreateItemCardComponent } from './item-page/create-item-card/create-item-card.component';
 import { ItemItemComponent } from './item-page/item-item/item-item.component';
+import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,14 @@ import { ItemItemComponent } from './item-page/item-item/item-item.component';
     CreateItemCardComponent,
     ItemItemComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    AngularFireModule.initializeApp(environment.firebase, 'angularfs'),
+    AngularFirestoreModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "gimig-gastronomie-software": {
+      "hosting": {
+        "gimig-test-project": [
+          "gimig-gastronomie-software"
+        ]
+      }
+    }
+  }
+}

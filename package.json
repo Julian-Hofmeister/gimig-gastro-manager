@@ -16,18 +16,22 @@
     "@angular/common": "~11.0.6",
     "@angular/compiler": "~11.0.6",
     "@angular/core": "~11.0.6",
+    "@angular/fire": "^6.1.4",
     "@angular/forms": "~11.0.6",
     "@angular/material": "^11.2.3",
     "@angular/platform-browser": "~11.0.6",
     "@angular/platform-browser-dynamic": "~11.0.6",
     "@angular/router": "~11.0.6",
     "@mdi/angular-material": "^5.9.55",
+    "angular": "^1.8.2",
     "bootstrap": "^4.6.0",
     "bootstrap4-toggle": "^3.6.1",
+    "fire": "^0.55.1",
     "material-design-icons": "^3.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "firebase": "^7.0 || ^8.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1100.6",
@@ -46,7 +50,13 @@
     "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.2"
+    "typescript": "~4.0.2",
+    "@angular-devkit/architect": ">= 0.900 < 0.1200",
+    "firebase-tools": "^8.0.0",
+    "fuzzy": "^0.1.3",
+    "inquirer": "^6.2.2",
+    "inquirer-autocomplete-prompt": "^1.0.1",
+    "open": "^7.0.3"
   },
   "description": "This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.6.",
   "main": "karma.conf.js",
