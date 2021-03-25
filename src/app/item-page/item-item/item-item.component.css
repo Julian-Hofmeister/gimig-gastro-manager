@@ -1,40 +1,27 @@
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-
-.item-card{
+.item-card {
+  margin: 20px 0px;
+  padding: 15px;
   background-color: #484848;
   color: white;
-  width: 80rem;
-  padding: 15px;
-  margin: 2% 0%;
   border-radius: 15px;
   box-shadow: 2px 1px 8px 1px rgba(0, 0, 0, 0.1);
 }
 
-.row {
-  justify-content: space-between;
+.text-field{
+  padding: 10px 0px;
+  height: 8.5rem;
 }
 
-.center {
-  display: flex;
-  justify-content: center;
-}
+.action-field{
+  margin: 0px 5px;
 
-.content-box{
-  padding: 10px;
-  width: 65rem;
-  height: 9rem;
+ margin-top: auto;
+ margin-bottom: auto;
 }
-
-.content-row {
-  position: relative;
-  width: 65rem;
-}
-
 
 h5{
     font-weight: 600;
@@ -46,8 +33,8 @@ h5{
 }
 
 #price {
+  margin-top: 10px;
   font-weight: 800;
-  margin-top: 4px;
 }
 
 img{
@@ -59,17 +46,24 @@ img{
 
 .btn-icon {
   color: whitesmoke;
-  margin: 0;
-  margin-right: 30px;
-  align-content: center;
-  padding-bottom: 0;
-  padding-top: 0px;
 }
 
 
-.action{
-padding: 0px 10px;
-align-content: center;
+/* ### PHONE ### */
+@media screen and (max-width: 768px) {
+  .main-row{
+    flex-direction: column;
+  }
+  img{
+    width: 100%;
+    height: auto;
+  }
+  
+}
+/* ### PHONE ### */
+@media screen and (max-width: 575px) {
+  .item-card {
+    border-radius: 0px;
+  }
 
 }
-

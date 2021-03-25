@@ -1,0 +1,121 @@
+* {
+      margin: 0;
+      padding: 0;
+  box-sizing: border-box;
+}
+
+.title-field {
+  margin-top: 15rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.my-heading {
+  font-family: 'BigJohn';
+  color: white;
+  font-size: 7rem;
+  letter-spacing: .4rem;
+
+}
+
+.gimig-heading {
+  font-size: 10rem;
+}
+
+#logo {
+  height: 280px;
+  width: auto;
+}
+
+.btn {
+  color: white;
+  margin-right: 4rem;
+  margin-top: 4rem;
+  padding: 10px 50px;
+  border-radius: 20rem;
+}
+
+.btn-filled {
+  background-color: #ED5327;
+  padding: 11.5px 50px;
+}
+
+.btn-outlined {
+  border-color: white;
+  border-width: 3px;
+  border-style: solid;
+}
+
+
+/* ### TABLET ### */
+@media screen and (max-width: 1024px) {
+  .title-field {
+    margin-top: 8rem;
+    margin-bottom: 8rem;
+  }
+
+  .my-heading {
+    font-size: 4.5rem;
+  }
+
+  .gimig-heading {
+    font-size: 5.5rem;
+  }
+
+  #logo {
+    height: 170px;
+  }
+
+  .btn {
+    margin-right: 4rem;
+  }
+
+  
+}
+
+/* ### PHONE ### */
+@media screen and (max-width: 768px) {
+    .title-field{
+        margin-top: 5rem;
+        margin-bottom: 8rem;
+    }
+    .my-heading {
+        font-size: 3.5rem;
+             margin: 0px 50px;
+    }
+    .gimig-heading{
+        font-size: 4rem;
+    }
+    #logo{
+        margin-top: 3rem;
+        padding: 0px 50px;
+        height: 120px;
+    }
+    .row{
+        justify-content: center;
+        align-items: center;
+    }
+    .btn-row{
+        flex-direction: column;
+        
+        margin-top: 2rem;
+        
+    }
+
+    .col{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+   
+   .btn{
+       margin-right: 0;
+       margin-top: 3rem;
+ 
+   }
+
+
+
+}
+

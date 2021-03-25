@@ -1,5 +1,8 @@
-<div class="item-card" [ngStyle]="{ opacity: category.isVisible ? 1 : 0.4 }">
-  <div id="container">
+<div
+  class="category-card"
+  [ngStyle]="{ opacity: category.isVisible ? 1 : 0.4 }"
+>
+  <div class="container">
     <img
       [src]="category.imagePath"
       (click)="onOpenContent()"

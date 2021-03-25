@@ -1,8 +1,8 @@
-<div class="row center">
-  <div class="create-category-card">
-    <div class="row">
-      <div class="col-xs-6">
-        <form [formGroup]="createCategoryForm" (ngSubmit)="onSubmit()">
+<div class="create-category-card">
+  <div class="container">
+    <form [formGroup]="createCategoryForm" (ngSubmit)="onSubmit()">
+      <div class="row justify-content-between">
+        <div class="col">
           <h5>Neue Kategorie hinzufügen</h5>
           <div class="form-group row">
             <div class="col">
@@ -36,20 +36,26 @@
           </div>
 
           <button
-            class="btn btn-submit"
+            class="btn btn-submit btn-large"
             type="submit"
             [disabled]="!createCategoryForm.valid"
           >
             {{ !isEditMode ? "Erstellen" : "Aktualisieren" }}
           </button>
-        </form>
-      </div>
-      <div class="col-xs-6">
-        <div class="img-placeholder center" *ngIf="!imgURL">
+        </div>
+
+        <div class="img-placeholder" *ngIf="!imgURL">
           <span class="material-icons"> wallpaper </span>
         </div>
         <img [src]="imgURL" *ngIf="imgURL" />
+        <button
+          class="btn btn-mobile btn-submit"
+          type="submit"
+          [disabled]="!createCategoryForm.valid"
+        >
+          {{ !isEditMode ? "Erstellen" : "Aktualisieren" }}
+        </button>
       </div>
-    </div>
+    </form>
   </div>
 </div>
