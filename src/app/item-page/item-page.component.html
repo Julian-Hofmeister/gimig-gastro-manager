@@ -1,16 +1,12 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar pageTitle="Speisekarte verwalten"></app-nav-bar>
 <app-title-element> </app-title-element>
-<app-caption-element></app-caption-element>
-<app-create-item-card></app-create-item-card>
+<app-caption-element [parentName]="parentName"></app-caption-element>
+<app-create-item-card [parentId]="id" [isFood]="hasFood"></app-create-item-card>
 
 <div class="container">
-  <div class="row">
-    <app-item-item
-      *ngFor="let item of items; let i = index"
-      [item]="item"
-      [index]="i"
-    ></app-item-item>
-  </div>
+    <div class="row">
+        <app-item-item *ngFor="let item of items; let i = index" [item]="item" [@simpleFadeAnimation]="'in'"></app-item-item>
+    </div>
 </div>
 
 <app-footer></app-footer>

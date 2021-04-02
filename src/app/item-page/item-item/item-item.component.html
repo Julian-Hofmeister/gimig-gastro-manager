@@ -1,46 +1,38 @@
-<div class="item-card">
-  <div class="container">
-    <div class="row justify-content-between main-row">
-      <div class="col">
-        <div class="text-field">
-          <h5>{{ item.name }}</h5>
-          <p id="desc">
-            {{ item.description }}
-          </p>
-        </div>
-        <div class="row justify-content-between action-field">
-          <div class="row">
-            <div class="btn btn-icon">
-              <span class="material-icons" (click)="onEditItem()">
+<div class="item-card" [ngStyle]="{ opacity: item.isVisible ? 1 : 0.4 }" *ngIf="item.imagePath | async; let url">
+    <div class="container">
+        <div class="row justify-content-between main-row">
+            <div class="col">
+                <div class="text-field">
+                    <h5>{{ item.name }}</h5>
+                    <p id="desc">
+                        {{ item.description }}
+                    </p>
+                </div>
+                <div class="row justify-content-between action-field">
+                    <div class="row">
+                        <div class="btn btn-icon">
+                            <span class="material-icons" (click)="onEditItem()">
                 create
               </span>
-            </div>
-            <div class="btn btn-icon">
-              <span class="material-icons" (click)="onDeleteItem()">
+                        </div>
+                        <div class="btn btn-icon">
+                            <span class="material-icons" (click)="onDeleteItem()">
                 delete
               </span>
-            </div>
-            <div
-              class="btn btn-icon"
-              (click)="onChangeVisibility()"
-              *ngIf="!item.isVisible"
-            >
-              <span class="material-icons"> visibility_off </span>
-            </div>
-            <div
-              class="btn btn-icon"
-              (click)="onChangeVisibility()"
-              *ngIf="item.isVisible"
-            >
-              <span class="material-icons"> visibility </span>
-            </div>
-          </div>
+                        </div>
+                        <div class="btn btn-icon" (click)="onChangeVisibility()" *ngIf="!item.isVisible">
+                            <span class="material-icons"> visibility_off </span>
+                        </div>
+                        <div class="btn btn-icon" (click)="onChangeVisibility()" *ngIf="item.isVisible">
+                            <span class="material-icons"> visibility </span>
+                        </div>
+                    </div>
 
-          <p id="price">{{ item.price }}€</p>
+                    <p id="price">{{ item.price }}€</p>
+                </div>
+            </div>
+
+            <img [src]="url" />
         </div>
-      </div>
-
-      <img src="{{ item.imagePath }}" />
     </div>
-  </div>
 </div>

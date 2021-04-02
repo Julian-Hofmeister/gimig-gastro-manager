@@ -1,25 +1,40 @@
-.center {
-  display: flex;
-  justify-content: center;
-}
 
+p{
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  line-height: 0;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 700;
+}
 
 .container{
   margin-top: 4rem;
 }
 
+.center {
+  margin-top: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
 /* ### PHONE ### */
 @media screen and (max-width: 768px) {
   .container {
-    margin-top: 1.5rem;
+    margin-top: 3rem;
+    text-align: center;
   }
 
 }
 
 /* ### PHONE ### */
 @media screen and (max-width: 575px) {
-  .container {
-    margin-top: 0rem;
-  }
+    .row {
+      margin-top: 2.5rem;
+
+    }
 
 }

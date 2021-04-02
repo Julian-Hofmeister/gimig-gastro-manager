@@ -1,18 +1,22 @@
+import { Observable } from 'rxjs';
+
 export class Category {
   public name: string;
   public hasCategories: boolean;
   public hasFood: boolean;
-  public imagePath: string;
+  public imagePath: Observable<any>;
   public isVisible: boolean;
   public id: string;
+  public parentId: string;
 
   constructor(
     name: string,
     hasCategories: boolean,
     hasFood: boolean,
-    imagePath: string,
+    imagePath: Observable<any>,
     isVisible: boolean,
-    id: string
+    id: string,
+    parentId: string
   ) {
     this.name = name;
     this.hasCategories = hasCategories;
@@ -20,5 +24,6 @@ export class Category {
     this.imagePath = imagePath;
     this.isVisible = isVisible;
     this.id = id;
+    this.parentId = parentId;
   }
 }

@@ -6,14 +6,9 @@ import { Category } from './category.model';
   providedIn: 'root',
 })
 export class CategoryService {
-  categoriesChanged = new Subject<Category[]>();
   editStatusChanged = new Subject<Category>();
-  currentCategory: Category;
-  currentIndex: number;
 
-  editCategory(category: Category, index: number) {
-    this.currentCategory = category;
-    this.currentIndex = index;
-    this.editStatusChanged.next(this.currentCategory);
+  editCategory(category: Category) {
+    this.editStatusChanged.next(category);
   }
 }

@@ -1,0 +1,78 @@
+.login-field{
+    margin-top: 10rem;
+}
+
+.row{
+    flex-direction: column;
+    align-items: center;
+}
+
+.col{
+    padding: 0;
+}
+
+img{
+    width: 10rem;
+    height: auto;
+    margin-bottom: 4rem;
+}
+
+.form-group {
+  text-align: left;
+  width: 20rem;
+  margin: 0;
+  padding: 0;
+  margin: auto;
+  margin-bottom: 1.5rem;
+
+}
+label {
+  color: white;
+}
+input {
+  border-radius: 50px;
+  border-width: 1.5px;
+  color: black;
+}
+input:focus {
+  border-color: coral;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0),
+    0 0 8px rgba(255, 0, 0, 0);
+}
+.btn {
+  width: 20rem;
+  margin: auto;
+  background-color: coral;
+  color: white;
+  border-radius: 50px;
+  margin-top: 1.5rem;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0),
+  0 0 8px rgba(255, 0, 0, 0);
+}
+
+.error-message {
+  margin-bottom: 3rem;
+
+}
+
+p{
+  color: white;
+  text-decoration: underline;
+  font-size: 14px;
+  margin-top: 2rem;
+  display: flex;
+  
+
+  
+}
+
+/* ### PHONE ### */
+@media screen and (max-width: 768px) {
+
+
+  .login-field {
+    margin-top: 6rem;
+    margin-bottom: 8rem;
+  }
+
+}

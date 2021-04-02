@@ -1,41 +1,26 @@
-<div
-  class="category-card"
-  [ngStyle]="{ opacity: category.isVisible ? 1 : 0.4 }"
->
-  <div class="container">
-    <img
-      [src]="category.imagePath"
-      (click)="onOpenContent()"
-      style="cursor: pointer"
-    />
-    <h3 (click)="onOpenContent()" style="cursor: pointer">
-      {{ category.id }}
-    </h3>
-    <div id="action-field">
-      <div class="row">
-        <div class="btn btn-icon">
-          <span class="material-icons" (click)="onEditCategory()">
+<div class="category-card" [ngStyle]="{ opacity: category.isVisible ? 1 : 0.4 }" *ngIf="category.imagePath | async; let url">
+    <div class="container">
+        <img [src]="url" (click)="onOpenContent()" style="cursor: pointer" />
+        <h3 (click)="onOpenContent()" style="cursor: pointer">
+            {{ category.name }}
+        </h3>
+        <div id="action-field">
+            <div class="row">
+                <div class="btn btn-icon">
+                    <span class="material-icons" (click)="onEditCategory()">
             create
           </span>
+                </div>
+                <div class="btn btn-icon" (click)="onDeleteCategory()">
+                    <span class="material-icons"> delete </span>
+                </div>
+                <div class="btn btn-icon" (click)="onChangeVisibility()" *ngIf="!category.isVisible">
+                    <span class="material-icons"> visibility_off </span>
+                </div>
+                <div class="btn btn-icon" (click)="onChangeVisibility()" *ngIf="category.isVisible">
+                    <span class="material-icons"> visibility </span>
+                </div>
+            </div>
         </div>
-        <div class="btn btn-icon" (click)="onDeleteCategory()">
-          <span class="material-icons"> delete </span>
-        </div>
-        <div
-          class="btn btn-icon"
-          (click)="onChangeVisibility()"
-          *ngIf="!category.isVisible"
-        >
-          <span class="material-icons"> visibility_off </span>
-        </div>
-        <div
-          class="btn btn-icon"
-          (click)="onChangeVisibility()"
-          *ngIf="category.isVisible"
-        >
-          <span class="material-icons"> visibility </span>
-        </div>
-      </div>
     </div>
-  </div>
 </div>

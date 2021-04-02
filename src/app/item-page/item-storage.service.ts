@@ -4,29 +4,42 @@ import {
   AngularFirestoreCollection,
   AngularFirestoreDocument,
 } from '@angular/fire/firestore';
+import {
+  AngularFireStorage,
+  AngularFireStorageReference,
+  AngularFireUploadTask,
+} from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Category } from '../category-page/category.model';
 import { Item } from './item.model';
 
 @Injectable({ providedIn: 'root' })
 export class ItemStorageService {
   items: Observable<any[]>;
-  itemDoc: AngularFirestoreDocument<Item>;
+  itemDoc: AngularFirestoreDocument<any>;
 
-  path: AngularFirestoreCollection<Item> = this.afs
-    .collection('restaurants')
-    .doc('julian@web.de')
-    .collection('menu')
-    .doc('food')
-    .collection('categories')
-    .doc('Dessert')
-    .collection('items');
+  userEmail = JSON.parse(localStorage.getItem('user')).email;
 
-  constructor(public afs: AngularFirestore) {}
+  path = this.afs.collection('restaurants').doc(this.userEmail);
 
-  getItems(path: AngularFirestoreCollection<Item>) {
-    this.items = path.snapshotChanges().pipe(
+  itemCollection: AngularFirestoreCollection<Item>;
+  ref: AngularFireStorageReference;
+  task: AngularFireUploadTask;
+
+  constructor(
+    public afs: AngularFirestore,
+    private afStorage: AngularFireStorage
+  ) {}
+
+  // GET ITEMS
+  getItems(id: string) {
+    // GETS REFERENCE
+    this.itemCollection = this.path.collection('/items', (ref) =>
+      ref.where('parentId', '==', id)
+    );
+
+    // GETS ITEMS
+    this.items = this.itemCollection.snapshotChanges().pipe(
       map((changes) => {
         return changes.map((a) => {
           const data = a.payload.doc.data() as Item;
@@ -41,43 +54,72 @@ export class ItemStorageService {
     return this.items;
   }
 
-  addItem(item: Item, path: AngularFirestoreCollection<Item>) {
-    // DEFINE A JAVA SCRIPT OBJECT
-    const itemObject: Item = {
-      name: item.name,
-      description: item.description,
-      imagePath: item.imagePath,
-      price: item.price,
-      isVisible: item.isVisible,
-      id: null,
-    };
+  // ADD ITEM
+  async addItem(item: Item, event: any) {
+    // GET IMG REFERNCE
+    const randomId = Math.random().toString(36).substring(2);
+    const imagePath: string = '/items/' + randomId;
+    this.ref = this.afStorage.ref(imagePath);
+    // UPLOAD IMAGE TO FIREBASE STORAGE
+    let task = await this.ref.put(event.target.files[0]);
 
-    path.add(itemObject);
+    // ADD TO FIRESTORE IF IMG UPLOAD SUCCESSFUL
+    console.log(task.state);
+    if (task.state == 'success') {
+      this.path.collection('items').add({
+        name: item.name,
+        description: item.description,
+        imagePath: imagePath,
+        price: item.price,
+        isVisible: item.isVisible,
+        isFood: item.isFood,
+        parentId: item.parentId,
+      });
+    } else {
+      // CATCH ERRORS
+      console.log('UPLOAD FAILED');
+    }
   }
 
-  deleteItem(item: Item, path: AngularFirestoreCollection<Item>) {
-    this.itemDoc = path.doc(`${item.id}`);
-    this.itemDoc.delete();
-  }
+  async updateItem(changedItem: Item, event: any, downloadUrl: string) {
+    // GET REFERENCE
+    this.itemDoc = this.path.collection('items').doc(`${changedItem.id}`);
 
-  updateItem(changedItem: Item, path: AngularFirestoreCollection<Item>) {
-    console.log(changedItem.id);
-    // DEFINE A JAVA SCRIPT OBJECT
-    const itemObject: Item = {
+    // UPDATE IMG IF CHANGED
+    if (event != null) {
+      // GET IMG REFERNCE
+      const randomId = Math.random().toString(36).substring(2);
+      var imagePath = '/items/' + randomId;
+      this.ref = this.afStorage.ref(imagePath);
+      // UPLOAD IMAGE TO FIREBASE STORAGE
+      var task = await this.ref.put(event.target.files[0]);
+
+      if (task.state == 'success') {
+        // UPDATE CATEGORY IMG
+        this.itemDoc.update({ imagePath: imagePath });
+        // DELETE OLD CATEGORY IMG
+        this.afStorage.storage.refFromURL(downloadUrl).delete();
+      }
+    }
+
+    // UPDATE ITEM TO FIRESTORE
+    this.itemDoc.update({
       name: changedItem.name,
       description: changedItem.description,
-      imagePath: changedItem.imagePath,
       price: changedItem.price,
       isVisible: changedItem.isVisible,
       id: changedItem.id,
-    };
-    // UPDATE TO FIRESTORE
-    this.itemDoc = path.doc(`${changedItem.id}`);
-    this.itemDoc.update(itemObject);
+    });
   }
 
-  changeItemVisibilty(item: Item, path: AngularFirestoreCollection<Item>) {
-    this.itemDoc = path.doc(`${item.id}`);
+  deleteItem(item: Item, downloadUrl: string) {
+    this.itemDoc = this.path.collection('items').doc(`${item.id}`);
+    this.itemDoc.delete();
+    this.afStorage.storage.refFromURL(downloadUrl).delete();
+  }
+
+  changeItemVisibilty(item: Item) {
+    this.itemDoc = this.path.collection('items').doc(`${item.id}`);
     this.itemDoc.update({ isVisible: !item.isVisible });
   }
 }

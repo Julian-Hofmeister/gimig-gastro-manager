@@ -6,14 +6,9 @@ import { Item } from './item.model';
   providedIn: 'root',
 })
 export class ItemService {
-  itemsChanged = new Subject<Item[]>();
   editStatusChanged = new Subject<Item>();
-  currentItem: Item;
-  currentIndex: number;
 
-  editItem(item: Item, index: number) {
-    this.currentItem = item;
-    this.currentIndex = index;
-    this.editStatusChanged.next(this.currentItem);
+  editItem(item: Item) {
+    this.editStatusChanged.next(item);
   }
 }

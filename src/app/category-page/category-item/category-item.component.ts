@@ -1,10 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
 import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from '@angular/fire/firestore';
-import { ActivatedRoute, Data, Router } from '@angular/router';
-import { DataStorageService } from 'src/app/category-page/data-storage.service';
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
+import { DataStorageService } from 'src/app/category-page/category-storage.service';
 import { Category } from '../category.model';
 import { CategoryService } from '../category.service';
 
@@ -12,54 +16,50 @@ import { CategoryService } from '../category.service';
   selector: 'app-category-item',
   templateUrl: './category-item.component.html',
   styleUrls: ['./category-item.component.css'],
+  animations: [
+    trigger('simpleFadeAnimation', [
+      state('in', style({ opacity: 1 })),
+      transition(':enter', [style({ opacity: 0 }), animate(1000)]),
+    ]),
+  ],
 })
-export class CategoryItemComponent implements OnInit {
+export class CategoryItemComponent {
   @Input() category: Category;
-  @Input() index: number;
 
   constructor(
     private categoryService: CategoryService,
     private dataStorageService: DataStorageService,
     private router: Router,
-    private route: ActivatedRoute,
     public afs: AngularFirestore
   ) {}
 
-  ngOnInit(): void {}
-
   onDeleteCategory() {
-    this.dataStorageService.deleteCategory(
-      this.category,
-      this.dataStorageService.path
-    );
+    this.category.imagePath.subscribe((url) => {
+      this.dataStorageService.deleteCategory(this.category, url);
+    });
   }
 
   onChangeVisibility() {
-    this.dataStorageService.changeCategoryVisibilty(
-      this.category,
-      this.dataStorageService.path
-    );
+    this.dataStorageService.changeCategoryVisibilty(this.category);
   }
 
   onOpenContent() {
+    // CHECK CONTENT
     if (this.category.hasCategories) {
-      this.router.navigateByUrl('category/category', {
-        state: { id: this.category.id },
-      });
-      this.dataStorageService.path = this.dataStorageService.path
-        .doc(this.category.id)
-        .collection('categories');
-      console.log(this.dataStorageService.path);
+      this.router.navigate(['category/' + this.category.id]);
     } else {
-      this.router.navigate(['items']);
-      this.dataStorageService.path = this.dataStorageService.path
-        .doc(this.category.id)
-        .collection('items');
-      console.log(this.dataStorageService.path);
+      this.router.navigate([
+        'items/' +
+          this.category.id +
+          '/' +
+          this.category.hasFood +
+          '/' +
+          this.category.name,
+      ]);
     }
   }
 
   onEditCategory() {
-    this.categoryService.editCategory(this.category, this.index);
+    this.categoryService.editCategory(this.category);
   }
 }

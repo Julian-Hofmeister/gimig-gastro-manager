@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { Category } from 'src/app/category-page/category.model';
-import { CategoryService } from 'src/app/category-page/category.service';
 import { ItemStorageService } from '../item-storage.service';
 import { Item } from '../item.model';
 import { ItemService } from '../item.service';
@@ -13,22 +12,31 @@ import { ItemService } from '../item.service';
   styleUrls: ['./create-item-card.component.css'],
 })
 export class CreateItemCardComponent implements OnInit, OnDestroy {
+  item: Item;
+
+  // INPUT
+  @Input() parentId: string;
+  @Input() isFood: boolean;
+
+  // FORM
   createItemForm: FormGroup;
   fileText = 'Bild auswählen';
-  category: Category;
   selectedFile = null;
   imagePath: any;
   imgURL: any;
   id: string;
+  uploadFile: any;
 
+  // EDIT
   editModeSub: Subscription;
   isEditMode = false;
-  item: Item;
-  editIndex: number;
+  editImage: any;
+  downloadUrl: string;
 
   constructor(
     private itemService: ItemService,
-    private itemStorageService: ItemStorageService
+    private itemStorageService: ItemStorageService,
+    public afs: AngularFirestore
   ) {}
 
   ngOnInit() {
@@ -50,16 +58,40 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
 
   // CHOOSE IMAGE
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-    this.fileText = this.selectedFile.name;
+    this.uploadFile = event;
 
+    this.selectedFile = event.target.files[0];
     var files = event.target.files;
 
-    if (files.length === 0) return;
-    var mimeType = files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
+    // CHECK FILE SIZE
+    const fileSize = Math.round(this.selectedFile.size / 1000);
+
+    if (fileSize > 900) {
+      window.confirm(
+        'Die Datei ist zu groß. (' +
+          fileSize +
+          'kb)\nDie maximale Dateigröße liegt bei 900kb.'
+      );
       return;
     }
+
+    // CHECK EMPTY
+    if (files.length === 0) return;
+
+    // CHECK FILE TYPE
+    var mimeType = files[0].type;
+
+    if (mimeType.match(/image\/*/) == null) {
+      window.confirm(
+        'Die Datei kann nicht als Bild erkannt werden. Bitte verwenden sie nur gängige Dateiformate'
+      );
+      return;
+    }
+
+    // SET FILE NAME AS TEXT
+    this.fileText = this.selectedFile.name;
+
+    // SET FILE
     var reader = new FileReader();
     this.imagePath = files;
     reader.readAsDataURL(files[0]);
@@ -68,42 +100,50 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
     };
   }
 
-  // CREATE NEW ITEM
+  // SUBMIT FORM
   onSubmit() {
-    //LOG
-    console.log(this.createItemForm);
-
     //DEFINE VALUES
     const name = this.createItemForm.value.name;
     const description = this.createItemForm.value.description;
     const price = this.createItemForm.value.price;
+    const isFood = this.isFood.toString() == 'true' ? true : false;
     const imagePath = this.imgURL;
     const isVisible = true;
 
+    // DEFINE ITEM
     this.item = new Item(
       name,
       description,
       price,
       imagePath,
       isVisible,
-      this.id
+      isFood,
+      this.id,
+      this.parentId
     );
 
-    // TAKE ACTION
+    // CHECK ACTION
     if (!this.isEditMode) {
-      this.itemStorageService.addItem(this.item, this.itemStorageService.path);
+      // CREATE ITEM
+      this.itemStorageService.addItem(this.item, this.uploadFile);
     } else {
+      // UPDATE ITEM
       this,
         this.itemStorageService.updateItem(
           this.item,
-          this.itemStorageService.path
+          this.uploadFile,
+          this.downloadUrl
         );
 
+      // RESET EDIT MODE
       this.isEditMode = false;
     }
 
-    //RESET
+    //RESET FORM
     this.imgURL = '';
+    this.editImage = null;
+    this.imagePath = null;
+    this.uploadFile = null;
     this.fileText = 'Bild auswählen';
     this.createItemForm.reset();
   }
@@ -111,6 +151,13 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
   onEditMode(item: Item) {
     // SET EDIT MODE
     this.isEditMode = true;
+    this.item = item;
+    this.imgURL = null;
+    this.uploadFile = null;
+
+    item.imagePath.subscribe((url) => {
+      this.downloadUrl = url;
+    });
 
     // SET FORM
     this.createItemForm = new FormGroup({
@@ -119,12 +166,12 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
       price: new FormControl(item.price, [Validators.required]),
       imagePath: new FormControl(null),
     });
-    this.imgURL = item.imagePath;
-    this.fileText = item.imagePath;
+    this.editImage = item.imagePath;
     this.id = item.id;
   }
 
   ngOnDestroy() {
+    // DESTROY SUBS
     this.editModeSub.unsubscribe();
   }
 }

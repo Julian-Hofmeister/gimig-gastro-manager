@@ -6,8 +6,8 @@
         alt="Gimig-Logo-White"
         routerLink="/home"
       />
-      <button class="btn page-title">{{ pageTitle }}</button>
-      <button class="btn">{{ mainAction }}</button>
+      <button class="btn page-title">{{ user }}</button>
+      <button class="btn" (click)="logout()">Logout</button>
     </div>
   </div>
 </nav>

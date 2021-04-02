@@ -1,58 +1,100 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DataStorageService } from '../category-page/data-storage.service';
 import { ItemStorageService } from './item-storage.service';
 import { Item } from './item.model';
-import { ItemService } from './item.service';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-item-page',
   templateUrl: './item-page.component.html',
   styleUrls: ['./item-page.component.css'],
+  animations: [
+    trigger('simpleFadeAnimation', [
+      state('in', style({ opacity: 1 })),
+      transition(':enter', [style({ opacity: 0 }), animate(1000)]),
+    ]),
+  ],
 })
 export class ItemPageComponent implements OnInit {
+  // VISIBLE LISTS
   items: Item[];
-  private itemSub: Subscription;
-  private streamSub: Subscription;
 
-  private path = this.itemStorageService.path;
+  // SUBS
+  private streamSub: Subscription;
+  private idSub: Subscription;
+
+  // ROUTE DATA
+  id: string;
+  hasFood: boolean;
+  parentName: string;
+
+  isLoading = false;
 
   constructor(
-    private itemService: ItemService,
-    private dataStorageService: DataStorageService,
-    private itemStorageService: ItemStorageService
+    private itemStorageService: ItemStorageService,
+    private route: ActivatedRoute,
+    private afStorage: AngularFireStorage
   ) {}
 
   ngOnInit() {
-    this.streamSub = this.itemStorageService
-      .getItems(this.path)
-      .subscribe((items) => {
-        // EMPTY LOCAL ITEMS
-        this.items = [];
+    // SHOW LOADING INDICATOR
+    this.isLoading = true;
 
-        // DEFINE NEW ITEM
-        for (let item of items) {
-          const fetchedItem = new Item(
-            item.name,
-            item.description,
-            item.price,
-            item.imagePath,
-            item.isVisible,
-            item.id
-          );
+    // GET DATA FROM ROUTE
+    this.idSub = this.route.params.subscribe((params: Params) => {
+      if (params['id']) {
+        this.id = params['id'];
+        this.hasFood = params['hasFood'];
+        this.parentName = params['name'];
+      } else {
+        this.id = 'items';
+      }
 
-          // PUSH NEW ITEM
-          this.items.push(fetchedItem);
-        }
-      });
+      // GET ITEMS
+      this.streamSub = this.itemStorageService
+        .getItems(this.id)
+        .subscribe((items) => {
+          // EMPTY LOCAL ITEMS
+          this.items = [];
 
-    this.itemSub = this.itemService.itemsChanged.subscribe((items: Item[]) => {
-      this.items = items;
+          // DEFINE NEW ITEM
+          for (let item of items) {
+            const imagePath = this.afStorage
+              .ref(item.imagePath)
+              .getDownloadURL();
+
+            const fetchedItem = new Item(
+              item.name,
+              item.description,
+              item.price,
+              imagePath,
+              item.isVisible,
+              item.isFood,
+              item.id,
+              item.parentId
+            );
+
+            // PUSH NEW ITEM
+            this.items.push(fetchedItem);
+          }
+
+          // STOP LOADING INDICATOR
+          this.isLoading = false;
+        });
     });
   }
 
   ngOnDestroy() {
-    this.itemSub.unsubscribe();
+    // DESTROY SUBS
     this.streamSub.unsubscribe();
+    this.idSub.unsubscribe();
   }
 }

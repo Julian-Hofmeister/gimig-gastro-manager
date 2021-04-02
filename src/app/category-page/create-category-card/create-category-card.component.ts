@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from '@angular/fire/firestore';
+import { Component, Input, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { DataStorageService } from 'src/app/category-page/data-storage.service';
+import { Subscription } from 'rxjs';
+import { DataStorageService } from 'src/app/category-page/category-storage.service';
 import { Category } from '../category.model';
 import { CategoryService } from '../category.service';
 
@@ -15,16 +12,27 @@ import { CategoryService } from '../category.service';
   styleUrls: ['./create-category-card.component.css'],
 })
 export class CreateCategoryCardComponent implements OnInit {
+  category: Category;
+
+  // INPUT
+  @Input() parentId: string;
+
+  // FORM
   createCategoryForm: FormGroup;
   fileText = 'Kategorie Bild auswählen';
-  category: Category;
   selectedFile = null;
   imagePath: any;
   imgURL: any;
   id: string;
+  uploadFile: any;
 
+  // SUBS
   editModeSub: Subscription;
+
+  // EDIT MODE
   isEditMode = false;
+  editImage: any;
+  downloadUrl: string;
 
   constructor(
     private categoryService: CategoryService,
@@ -51,16 +59,40 @@ export class CreateCategoryCardComponent implements OnInit {
 
   // CHOOSE IMAGE
   onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-    this.fileText = this.selectedFile.name;
+    this.uploadFile = event;
 
+    this.selectedFile = event.target.files[0];
     var files = event.target.files;
 
-    if (files.length === 0) return;
-    var mimeType = files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
+    // CHECK FILE SIZE
+    const fileSize = Math.round(this.selectedFile.size / 1000);
+
+    if (fileSize > 900) {
+      window.confirm(
+        'Die Datei ist zu groß. (' +
+          fileSize +
+          'kb)\nDie maximale Dateigröße liegt bei 900kb.'
+      );
       return;
     }
+
+    // CHECK EMPTY
+    if (files.length === 0) return;
+
+    // CHECK FILE TYPE
+    var mimeType = files[0].type;
+
+    if (mimeType.match(/image\/*/) == null) {
+      window.confirm(
+        'Die Datei kann nicht als Bild erkannt werden. Bitte verwenden sie nur gängige Dateiformate'
+      );
+      return;
+    }
+
+    // SET FILE NAME AS TEXT
+    this.fileText = this.selectedFile.name;
+
+    // SET FILE
     var reader = new FileReader();
     this.imagePath = files;
     reader.readAsDataURL(files[0]);
@@ -69,39 +101,40 @@ export class CreateCategoryCardComponent implements OnInit {
     };
   }
 
-  // CREATE NEW CATEGORY
+  // SUBMIT FORM
   onSubmit() {
-    // LOG FORM
-    console.log(this.createCategoryForm);
-
     // DEFINE VALUES
     const name = this.createCategoryForm.value.name;
-    const hasCategories = this.createCategoryForm.value.hasCategories;
-    const hasFood = this.createCategoryForm.value.hasFood;
     const imagePath = this.imgURL;
     const isVisible = true;
+    const hasFood =
+      this.createCategoryForm.value.hasFood.toString() == 'true' ? true : false;
+    const hasCategories =
+      this.createCategoryForm.value.hasCategories.toString() == 'true'
+        ? true
+        : false;
 
+    // DEFINE NEW CATEGORY
     this.category = new Category(
       name,
       hasCategories,
       hasFood,
       imagePath,
       isVisible,
-      this.id
+      this.id,
+      this.parentId
     );
 
-    // TAKE ACTION
+    // CHECK ACTION
     if (!this.isEditMode) {
       // CREATE CATEGORY
-      this.dataStorageService.addCategory(
-        this.category,
-        this.dataStorageService.path
-      );
+      this.dataStorageService.addCategory(this.category, this.uploadFile);
     } else {
       // UPDATE CATEGORY
       this.dataStorageService.updateCategory(
         this.category,
-        this.dataStorageService.path
+        this.uploadFile,
+        this.downloadUrl
       );
       // RESET EDIT MODE
       this.isEditMode = false;
@@ -109,12 +142,22 @@ export class CreateCategoryCardComponent implements OnInit {
 
     //RESET FORM
     this.imgURL = '';
+    this.editImage = null;
+    this.imagePath = null;
+    this.uploadFile = null;
     this.fileText = 'Bild auswählen';
     this.createCategoryForm.reset();
   }
 
   onEditMode(category: Category) {
     this.isEditMode = true;
+    this.category = category;
+    this.imgURL = null;
+    this.uploadFile = null;
+
+    category.imagePath.subscribe((url) => {
+      this.downloadUrl = url;
+    });
 
     // SET FORM
     this.createCategoryForm = new FormGroup({
@@ -126,8 +169,12 @@ export class CreateCategoryCardComponent implements OnInit {
       hasFood: new FormControl(category.hasFood, Validators.required),
       imagePath: new FormControl(null),
     });
-    this.imgURL = category.imagePath;
-    this.fileText = category.imagePath;
+    this.editImage = category.imagePath;
     this.id = category.id;
+  }
+
+  ngOnDestroy() {
+    // DESTROY SUBS
+    this.editModeSub.unsubscribe();
   }
 }

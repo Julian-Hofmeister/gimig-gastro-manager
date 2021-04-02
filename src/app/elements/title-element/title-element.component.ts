@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-title-element',
   templateUrl: './title-element.component.html',
-  styleUrls: ['./title-element.component.css']
+  styleUrls: ['./title-element.component.css'],
 })
-export class TitleElementComponent implements OnInit {
+export class TitleElementComponent {
+  constructor(private _location: Location) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
+  backClicked() {
+    this._location.back();
   }
-
 }

@@ -1,2 +1,62 @@
-<app-nav-bar pageTitle="My Gimig - Login" mainAction="Home"></app-nav-bar>
-<app-login-field></app-login-field>
+<app-nav-bar
+  *ngIf="isLoginMode"
+  pageTitle="My Gimig - Login"
+  mainAction="Home"
+></app-nav-bar>
+<app-nav-bar
+  *ngIf="!isLoginMode"
+  pageTitle="My Gimig - Registrieren"
+  mainAction="Home"
+></app-nav-bar>
+
+<div class="login-field">
+  <div class="container">
+    <div class="row">
+      <img src="/assets/images/Gimig-Logo-White.png" alt="Gimig-Logo-White" />
+      <div
+        class="error-message alert alert-danger"
+        *ngIf="error"
+        (click)="resetError()"
+      >
+        {{ error }}
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group row">
+          <div class="col">
+            <label for="email">E-mail</label>
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Email"
+              formControlName="email"
+              (change)="resetError()"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col">
+            <label for="password">Passwort</label>
+            <input
+              type="password"
+              class="form-control"
+              placeholder="***********"
+              formControlName="password"
+              (change)="resetError()"
+            />
+          </div>
+        </div>
+
+        <button
+          class="btn btn-submit btn-large"
+          type="submit"
+          [disabled]="!loginForm.valid"
+        >
+          {{ isLoginMode ? "Login" : "Registrieren" }}
+        </button>
+        <p (click)="switchAuthMode()">
+          {{ !isLoginMode ? "Login" : "Registrieren" }}
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

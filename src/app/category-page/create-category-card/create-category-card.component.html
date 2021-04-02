@@ -1,61 +1,54 @@
 <div class="create-category-card">
-  <div class="container">
-    <form [formGroup]="createCategoryForm" (ngSubmit)="onSubmit()">
-      <div class="row justify-content-between">
-        <div class="col">
-          <h5>Neue Kategorie hinzufügen</h5>
-          <div class="form-group row">
-            <div class="col">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Kategorie Name"
-                formControlName="name"
-              />
-            </div>
-          </div>
-          <select class="form-control" formControlName="hasCategories">
-            <option value="false">Enthält Speisen/Getränke</option>
-            <option value="true">Enthält weitere Kategorien</option>
+    <div class="container">
+        <form [formGroup]="createCategoryForm" (ngSubmit)="onSubmit()">
+            <div class="row justify-content-between">
+                <div class="col">
+                    <h5>Neue Kategorie hinzufügen</h5>
+                    <div class="form-group row">
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Kategorie Name" formControlName="name" />
+                        </div>
+                    </div>
+                    <select class="form-control" formControlName="hasCategories">
+            <option value="false" [disabled]="isEditMode ? true : false">
+              Enthält Speisen/Getränke
+            </option>
+            <option value="true" [disabled]="isEditMode ? true : false">
+              Enthält weitere Kategorien
+            </option>
           </select>
-          <select class="form-control" formControlName="hasFood">
-            <option value="true">Enthält Speisen</option>
+                    <select class="form-control" formControlName="hasFood">
             <option value="false">Enthält Getränke</option>
+            <option value="true">Enthält Speisen</option>
           </select>
-          <div class="custom-file form-control">
-            <input
-              type="file"
-              class="custom-file-input"
-              id="categoryImage"
-              formControlName="imagePath"
-              (change)="onFileSelected($event)"
-            />
-            <label class="custom-file-label" for="categoryImage">{{
+                    <div class="custom-file form-control">
+                        <input type="file" class="custom-file-input" id="categoryImage" formControlName="imagePath" (change)="onFileSelected($event)" />
+                        <label class="custom-file-label" for="categoryImage">{{
               fileText
             }}</label>
-          </div>
+                    </div>
 
-          <button
-            class="btn btn-submit btn-large"
-            type="submit"
-            [disabled]="!createCategoryForm.valid"
-          >
+                    <button class="btn btn-submit btn-large" type="submit" [disabled]="!createCategoryForm.valid">
             {{ !isEditMode ? "Erstellen" : "Aktualisieren" }}
           </button>
-        </div>
-
-        <div class="img-placeholder" *ngIf="!imgURL">
-          <span class="material-icons"> wallpaper </span>
-        </div>
-        <img [src]="imgURL" *ngIf="imgURL" />
-        <button
-          class="btn btn-mobile btn-submit"
-          type="submit"
-          [disabled]="!createCategoryForm.valid"
-        >
+                </div>
+                <!-- PLACEHOLDER -->
+                <div class="img-placeholder" *ngIf="!imgURL && !editImage">
+                    <span class="material-icons"> wallpaper </span>
+                </div>
+                <!-- SELECTED IMAGE -->
+                <div *ngIf="imgURL">
+                    <img [src]="imgURL" />
+                </div>
+                <!-- EDIT IMAGE -->
+                <div *ngIf="!imgURL && editImage | async; let url">
+                    <img [src]="url" />
+                </div>
+                <button class="btn btn-mobile btn-submit" type="submit" [disabled]="!createCategoryForm.valid">
           {{ !isEditMode ? "Erstellen" : "Aktualisieren" }}
         </button>
-      </div>
-    </form>
-  </div>
+                <!-- <progress max="100" [value]="uploadProgress | async"></progress> -->
+            </div>
+        </form>
+    </div>
 </div>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from './login-page/auth.service';
 // import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
@@ -8,4 +9,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'gimig-test-project';
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    this.authService.autoSignIn();
+  }
 }
