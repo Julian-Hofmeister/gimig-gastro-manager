@@ -31,11 +31,14 @@ export class DataStorageService {
   ) {}
 
   // GET CATEGORIES
-  getCategories(id: string) {
+  getCategories(id: string, pathAttachment: string) {
     // GETS REFERENCE
-    this.categoryCollection = this.path.collection('/categories', (ref) =>
-      ref.where('parentId', '==', id)
+    this.categoryCollection = this.path.collection(
+      '/' + pathAttachment,
+      (ref) => ref.where('parentId', '==', id)
     );
+
+    console.log('ID: ' + id + '  /  ' + 'PATH: ' + pathAttachment);
 
     // GETS CATEGORIES
     this.categories = this.categoryCollection.snapshotChanges().pipe(
@@ -52,9 +55,15 @@ export class DataStorageService {
 
   // ADD CATEGORY
   async addCategory(category: Category, event: any) {
+    console.log(category.hasFood);
+    const pathAttachment: string = category.hasFood
+      ? 'categories-food'
+      : 'categories-beverages';
+
     // GET IMG REFERNCE
     const randomId = Math.random().toString(36).substring(2);
-    const imagePath: string = '/categories/' + randomId;
+    var imagePath: string = '/' + pathAttachment + '/' + randomId;
+
     this.ref = this.afStorage.ref(imagePath);
     // UPLOAD IMAGE TO FIREBASE STORAGE
     let task = await this.ref.put(event.target.files[0]);
@@ -62,7 +71,7 @@ export class DataStorageService {
     // ADD NEW CATEGORY TO FIRESTORE IF IMG UPLOAD SUCCESSFUL
     console.log(task.state);
     if (task.state == 'success') {
-      this.path.collection('categories').add({
+      this.path.collection(pathAttachment).add({
         name: category.name,
         hasCategories: category.hasCategories,
         hasFood: category.hasFood,
@@ -81,16 +90,20 @@ export class DataStorageService {
     event: any,
     downloadUrl: string
   ) {
+    const pathAttachment: string = changedCategory.hasFood
+      ? 'categories-food'
+      : 'categories-beverages';
+
     // GET REFERENCE
     this.categoryDoc = this.path
-      .collection('categories')
+      .collection(pathAttachment)
       .doc(`${changedCategory.id}`);
 
     // UPDATE IMG IF CHANGED
     if (event != null) {
       // GET IMG REFERNCE
       const randomId = Math.random().toString(36).substring(2);
-      var imagePath = '/categories/' + randomId;
+      var imagePath = '/' + pathAttachment + '/' + randomId;
       this.ref = this.afStorage.ref(imagePath);
       // UPLOAD IMAGE TO FIREBASE STORAGE
       var task = await this.ref.put(event.target.files[0]);
@@ -112,6 +125,10 @@ export class DataStorageService {
   }
 
   deleteCategory(category: Category, downloadUrl: string) {
+    const pathAttachment: string = category.hasFood
+      ? 'categories-food'
+      : 'categories-beverages';
+
     // IF ARRAY CONTAINS SUBCATEGORIES DELETING IS NOT POSSIBLE
     var subCategoryArray: string[] = [];
     var itemsArray = [];
@@ -121,10 +138,12 @@ export class DataStorageService {
     console.log(downloadUrl);
 
     // DOCUMENT REFERENCE TO ID
-    var categoryDoc = this.path.collection('categories').doc(`${category.id}`);
+    var categoryDoc = this.path
+      .collection(pathAttachment)
+      .doc(`${category.id}`);
 
     // REFERENCE TO SUBCATEGORIES
-    var subCategories = this.path.collection('/categories', (ref) =>
+    var subCategories = this.path.collection('/' + pathAttachment, (ref) =>
       ref.where('parentId', '==', category.id)
     );
 
@@ -184,7 +203,13 @@ export class DataStorageService {
   }
 
   changeCategoryVisibilty(category: Category) {
-    this.categoryDoc = this.path.collection('categories').doc(`${category.id}`);
+    const pathAttachment: string = category.hasFood
+      ? 'categories-food'
+      : 'categories-beverages';
+
+    this.categoryDoc = this.path
+      .collection(pathAttachment)
+      .doc(`${category.id}`);
     this.categoryDoc.update({ isVisible: !category.isVisible });
   }
 }

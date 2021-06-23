@@ -33,7 +33,7 @@ export class ItemPageComponent implements OnInit {
 
   // ROUTE DATA
   id: string;
-  hasFood: boolean;
+  hasFood: string;
   parentName: string;
 
   isLoading = false;
@@ -60,7 +60,7 @@ export class ItemPageComponent implements OnInit {
 
       // GET ITEMS
       this.streamSub = this.itemStorageService
-        .getItems(this.id)
+        .getItems(this.id, this.hasFood)
         .subscribe((items) => {
           // EMPTY LOCAL ITEMS
           this.items = [];
@@ -79,8 +79,11 @@ export class ItemPageComponent implements OnInit {
               item.isVisible,
               item.isFood,
               item.id,
-              item.parentId
+              item.parentId,
+              item.index
             );
+
+            console.log(fetchedItem);
 
             // PUSH NEW ITEM
             this.items.push(fetchedItem);

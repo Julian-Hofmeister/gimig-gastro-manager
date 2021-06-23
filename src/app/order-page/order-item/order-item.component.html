@@ -1,0 +1,34 @@
+<div class="order-card" [ngStyle]="{ opacity: order.isVisible ? 1 : 0.4 }" *ngIf="order.imagePath | async; let url">
+    <div class="container">
+        <div class="row justify-content-between main-row">
+            <div class="col">
+                <div class="text-field">
+                    <div class="row content-row">
+                        <h5>{{ order.name }}</h5>
+                        <p>Tisch: {{ order.tableNumber }}</p>
+                    </div>
+                    <p id="desc">Anzahl: {{ order.amount }}x</p>
+                </div>
+                <div class="row justify-content-between action-field">
+                    <div class="row">
+                        <div class="btn btn-icon">
+                            <span class="material-icons" (click)="onAcceptOrder()">
+                done
+              </span>
+                        </div>
+                        <div class="btn btn-icon">
+                            <span class="material-icons" (click)="onDeleteOrder()">
+                delete
+              </span>
+                        </div>
+                    </div>
+                    <p id="price">Bestellt: {{ order.timestamp | date: "h:mm" }}</p>
+
+                    <p id="price">{{ order.price * order.amount }}€</p>
+                </div>
+            </div>
+
+            <img [src]="url" />
+        </div>
+    </div>
+</div>

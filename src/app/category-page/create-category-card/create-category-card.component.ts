@@ -16,6 +16,7 @@ export class CreateCategoryCardComponent implements OnInit {
 
   // INPUT
   @Input() parentId: string;
+  @Input() foodSelected: boolean;
 
   // FORM
   createCategoryForm: FormGroup;
@@ -41,11 +42,12 @@ export class CreateCategoryCardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log(this.foodSelected);
     // INIT FORM
     this.createCategoryForm = new FormGroup({
       name: new FormControl(null, Validators.required),
       hasCategories: new FormControl(false, Validators.required),
-      hasFood: new FormControl(true, Validators.required),
+      hasFood: new FormControl(false, Validators.required),
       imagePath: new FormControl(null, Validators.required),
     });
 
@@ -59,6 +61,7 @@ export class CreateCategoryCardComponent implements OnInit {
 
   // CHOOSE IMAGE
   onFileSelected(event: any) {
+    console.log(this.foodSelected);
     this.uploadFile = event;
 
     this.selectedFile = event.target.files[0];
@@ -118,7 +121,7 @@ export class CreateCategoryCardComponent implements OnInit {
     this.category = new Category(
       name,
       hasCategories,
-      hasFood,
+      this.foodSelected,
       imagePath,
       isVisible,
       this.id,

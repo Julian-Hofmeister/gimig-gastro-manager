@@ -1,0 +1,10 @@
+<app-nav-bar pageTitle="Speisekarte verwalten"></app-nav-bar>
+<app-title-element> </app-title-element>
+
+<div class="container">
+    <div class="row">
+        <app-order-item *ngFor="let order of loadedOrders; let i = index" [order]="order" [@simpleFadeAnimation]="'in'"></app-order-item>
+    </div>
+</div>
+
+<!-- <app-footer></app-footer> -->

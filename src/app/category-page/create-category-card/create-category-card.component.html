@@ -18,8 +18,8 @@
             </option>
           </select>
                     <select class="form-control" formControlName="hasFood">
-            <option value="false">Enthält Getränke</option>
-            <option value="true">Enthält Speisen</option>
+            <option value="false" [disabled]="true">Enthält Getränke</option>
+            <option value="true" [disabled]="true">Enthält Speisen</option>
           </select>
                     <div class="custom-file form-control">
                         <input type="file" class="custom-file-input" id="categoryImage" formControlName="imagePath" (change)="onFileSelected($event)" />

@@ -19,7 +19,6 @@ export class ItemStorageService {
   itemDoc: AngularFirestoreDocument<any>;
 
   userEmail = JSON.parse(localStorage.getItem('user')).email;
-
   path = this.afs.collection('restaurants').doc(this.userEmail);
 
   itemCollection: AngularFirestoreCollection<Item>;
@@ -32,10 +31,12 @@ export class ItemStorageService {
   ) {}
 
   // GET ITEMS
-  getItems(id: string) {
+  getItems(id: string, hasFood: string) {
+    const pathAttachment = hasFood == 'true' ? 'items-food' : 'items-beverages';
+
     // GETS REFERENCE
-    this.itemCollection = this.path.collection('/items', (ref) =>
-      ref.where('parentId', '==', id)
+    this.itemCollection = this.path.collection('/' + pathAttachment, (ref) =>
+      ref.where('parentId', '==', id).orderBy("name")
     );
 
     // GETS ITEMS
@@ -44,9 +45,9 @@ export class ItemStorageService {
         return changes.map((a) => {
           const data = a.payload.doc.data() as Item;
           data.id = a.payload.doc.id;
-          console.log('DATA:');
-          console.log(data);
-          console.log(data.id);
+
+          // console.log(data);
+
           return data;
         });
       })
@@ -55,10 +56,12 @@ export class ItemStorageService {
   }
 
   // ADD ITEM
-  async addItem(item: Item, event: any) {
+  async addItem(item: Item, event: any, isFood: any) {
+    const pathAttachment = isFood == 'true' ? 'items-food' : 'items-beverages';
+
     // GET IMG REFERNCE
     const randomId = Math.random().toString(36).substring(2);
-    const imagePath: string = '/items/' + randomId;
+    const imagePath: string = '/' + pathAttachment + '/' + randomId;
     this.ref = this.afStorage.ref(imagePath);
     // UPLOAD IMAGE TO FIREBASE STORAGE
     let task = await this.ref.put(event.target.files[0]);
@@ -66,7 +69,7 @@ export class ItemStorageService {
     // ADD TO FIRESTORE IF IMG UPLOAD SUCCESSFUL
     console.log(task.state);
     if (task.state == 'success') {
-      this.path.collection('items').add({
+      this.path.collection(pathAttachment).add({
         name: item.name,
         description: item.description,
         imagePath: imagePath,
@@ -74,6 +77,7 @@ export class ItemStorageService {
         isVisible: item.isVisible,
         isFood: item.isFood,
         parentId: item.parentId,
+        index: item.index,
       });
     } else {
       // CATCH ERRORS
@@ -83,7 +87,8 @@ export class ItemStorageService {
 
   async updateItem(changedItem: Item, event: any, downloadUrl: string) {
     // GET REFERENCE
-    this.itemDoc = this.path.collection('items').doc(`${changedItem.id}`);
+    const pathAttachment = changedItem.isFood ? 'items-food' : 'items-beverages';
+    this.itemDoc = this.path.collection(pathAttachment).doc(`${changedItem.id}`);
 
     // UPDATE IMG IF CHANGED
     if (event != null) {
@@ -113,13 +118,19 @@ export class ItemStorageService {
   }
 
   deleteItem(item: Item, downloadUrl: string) {
-    this.itemDoc = this.path.collection('items').doc(`${item.id}`);
+    // GET REFERENCE
+    const pathAttachment = item.isFood ? 'items-food' : 'items-beverages';
+    this.itemDoc = this.path.collection(pathAttachment).doc(`${item.id}`);
+
     this.itemDoc.delete();
     this.afStorage.storage.refFromURL(downloadUrl).delete();
   }
 
   changeItemVisibilty(item: Item) {
-    this.itemDoc = this.path.collection('items').doc(`${item.id}`);
+    // GET REFERENCE
+    const pathAttachment = item.isFood ? 'items-food' : 'items-beverages';
+    this.itemDoc = this.path.collection(pathAttachment).doc(`${item.id}`);
+
     this.itemDoc.update({ isVisible: !item.isVisible });
   }
 }

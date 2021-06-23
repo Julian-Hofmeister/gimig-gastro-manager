@@ -17,6 +17,7 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
   // INPUT
   @Input() parentId: string;
   @Input() isFood: boolean;
+  @Input() items: Item[];
 
   // FORM
   createItemForm: FormGroup;
@@ -109,6 +110,7 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
     const isFood = this.isFood.toString() == 'true' ? true : false;
     const imagePath = this.imgURL;
     const isVisible = true;
+    const index = this.items.length + 1 ;
 
     // DEFINE ITEM
     this.item = new Item(
@@ -119,13 +121,14 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
       isVisible,
       isFood,
       this.id,
-      this.parentId
+      this.parentId,
+      index,
     );
 
     // CHECK ACTION
     if (!this.isEditMode) {
       // CREATE ITEM
-      this.itemStorageService.addItem(this.item, this.uploadFile);
+      this.itemStorageService.addItem(this.item, this.uploadFile, this.isFood);
     } else {
       // UPDATE ITEM
       this,

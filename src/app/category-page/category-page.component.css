@@ -1,40 +1,41 @@
-
-p{
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 18px;
-  line-height: 0;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  font-weight: 700;
+p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 2rem;
+    line-height: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800;
+    margin-right: 2rem;
+    margin-top: 4rem;
+    cursor: pointer;
 }
 
-.container{
-  margin-top: 4rem;
+.container {
+    margin-top: 1rem;
 }
 
 .center {
-  margin-top: 10rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    margin-top: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
-
 /* ### PHONE ### */
+
 @media screen and (max-width: 768px) {
-  .container {
-    margin-top: 3rem;
-    text-align: center;
-  }
-
+    .container {
+        margin-top: 3rem;
+        text-align: center;
+    }
 }
 
+
 /* ### PHONE ### */
+
 @media screen and (max-width: 575px) {
     .row {
-      margin-top: 2.5rem;
-
+        margin-top: 2.5rem;
     }
-
 }

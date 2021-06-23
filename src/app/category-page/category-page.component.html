@@ -1,17 +1,25 @@
 <app-nav-bar pageTitle="Speisekarte verwalten"></app-nav-bar>
 <app-title-element></app-title-element>
 
-<app-create-category-card [parentId]="id"></app-create-category-card>
+<app-create-category-card [parentId]="id" [foodSelected]="isFood"></app-create-category-card>
+<div class="container">
+    <div class="row" *ngIf="canChange == true">
+        <p [ngStyle]="{ opacity: isFood ? 1 : 0.4 }" [routerLink]="['/category', 'categories-food', true]">
+            Speisen
+        </p>
+        <p [ngStyle]="{ opacity: isFood ? 0.4 : 1 }" [routerLink]="['/category', 'categories-beverages', false]">
+            Getränke
+        </p>
+    </div>
+</div>
 
-<div class="container" *ngIf="foodCategories.length > 0">
-    <p>Speisen</p>
+<div class="container" *ngIf="foodCategories.length > 0 && isFood">
     <div class="row justify-content-between">
         <app-category-item *ngFor="let foodCategory of foodCategories" [category]="foodCategory" [@simpleFadeAnimation]="'in'"></app-category-item>
     </div>
 </div>
 
-<div class="container" *ngIf="beverageCategories.length > 0">
-    <p>Getränke</p>
+<div class="container" *ngIf="beverageCategories.length > 0 && !isFood">
     <div class="row justify-content-between">
         <app-category-item *ngFor="let beverageCategory of beverageCategories" [category]="beverageCategory" [@simpleFadeAnimation]="'in'"></app-category-item>
     </div>

@@ -46,7 +46,9 @@ export class CategoryItemComponent {
   onOpenContent() {
     // CHECK CONTENT
     if (this.category.hasCategories) {
-      this.router.navigate(['category/' + this.category.id]);
+      this.router.navigate([
+        'category/' + this.category.id + '/' + this.category.hasFood,
+      ]);
     } else {
       this.router.navigate([
         'items/' +

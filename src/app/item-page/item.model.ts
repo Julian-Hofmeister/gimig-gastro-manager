@@ -9,6 +9,7 @@ export class Item {
   public isFood: boolean;
   public id: string;
   public parentId: string;
+  public index: number;
 
   constructor(
     name: string,
@@ -18,7 +19,8 @@ export class Item {
     isVisible: boolean,
     isFood: boolean,
     id: string,
-    parentId: string
+    parentId: string,
+    index: number
   ) {
     this.name = name;
     this.description = description;
@@ -28,5 +30,6 @@ export class Item {
     this.isFood = isFood;
     this.id = id;
     this.parentId = parentId;
+    this.index = index;
   }
 }

@@ -22,6 +22,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FooterComponent } from './elements/footer/footer.component';
 import { LoadingSpinnerComponent } from './elements/loading-spinner/loading-spinner.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OrderPageComponent } from './order-page/order-page.component';
+import { OrderItemComponent } from './order-page/order-item/order-item.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ItemItemComponent,
     FooterComponent,
     LoadingSpinnerComponent,
+    OrderPageComponent,
+    OrderItemComponent,
   ],
   imports: [
     BrowserModule,

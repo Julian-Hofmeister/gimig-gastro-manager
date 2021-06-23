@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { DataStorageService } from './category-storage.service';
 import { Category } from './category.model';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -35,6 +35,9 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
   id: string;
   isLoading = false;
 
+  isFood = null;
+  canChange = true;
+
   constructor(
     private dataStorageService: DataStorageService,
     private route: ActivatedRoute,
@@ -45,17 +48,31 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
     // SHOW LOADING INDICATOR
     this.isLoading = true;
 
-    // GET PARENT ID FROM ROUTE
+    // GET PARAMS FROM ROUTE
     this.idSub = this.route.params.subscribe((params: Params) => {
       if (params['id']) {
         this.id = params['id'];
+        this.isFood = params['hasFood'];
       } else {
-        this.id = 'categories';
+        this.id = 'categories-food';
+      }
+
+      // CHECK AND DECLARE ISFOOD
+      this.isFood == 'true' ? (this.isFood = true) : (this.isFood = false);
+
+      // CHECK AND DECLARE CANCHANGE
+      if (this.id == 'categories-food' || this.id == 'categories-beverages') {
+        this.canChange = true;
+      } else {
+        this.canChange = false;
       }
 
       // GET CATEGORIES
       this.streamSub = this.dataStorageService
-        .getCategories(this.id)
+        .getCategories(
+          this.id,
+          this.isFood ? 'categories-food' : 'categories-beverages'
+        )
         .subscribe((categories) => {
           // EMPTY LOCAL CATEGORIES
           this.foodCategories = [];

@@ -6,6 +6,7 @@ import { ItemPageComponent } from './item-page/item-page.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { AuthGuard } from './login-page/auth.guard';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { OrderPageComponent } from './order-page/order-page.component';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -18,16 +19,26 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard],
   },
   {
+    path: 'category/:id/:hasFood',
+    component: CategoryPageComponent,
+    canActivate: [AuthGuard],
+  },
+  {
     path: 'category/:id',
     component: CategoryPageComponent,
     canActivate: [AuthGuard],
   },
+
   {
     path: 'items/:id/:hasFood/:name',
     component: ItemPageComponent,
     canActivate: [AuthGuard],
   },
-
+  {
+    path: 'orders',
+    component: OrderPageComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'elements', component: ElementsComponent },
 ];
 

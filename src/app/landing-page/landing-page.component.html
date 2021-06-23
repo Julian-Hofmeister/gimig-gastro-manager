@@ -1,29 +1,25 @@
 <app-nav-bar pageTitle="Julian Hofmeister" mainAction="Logout"></app-nav-bar>
 
 <div class="title-field">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <div class="heading">
-          <h2 class="my-heading">MY</h2>
-          <h1 class="my-heading gimig-heading">GIMIG</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="heading">
+                    <h2 class="my-heading">MY</h2>
+                    <h1 class="my-heading gimig-heading">GIMIG</h1>
+                </div>
+            </div>
+
+            <img id="logo" src="/assets/images/Gimig-Logo-White.png" alt="Gimig-Logo-White" />
         </div>
-      </div>
 
-      <img
-        id="logo"
-        src="/assets/images/Gimig-Logo-White.png"
-        alt="Gimig-Logo-White"
-      />
+        <div class="row btn-row">
+            <div class="btn btn-filled" routerLink="/category/categories-food/true">
+                Speisekarte verwalten
+            </div>
+            <div class="btn btn-outlined" routerLink="/orders">
+                Bestellungen verwalten
+            </div>
+        </div>
     </div>
-
-    <div class="row btn-row">
-      <div class="btn btn-filled" routerLink="/category">
-        Speisekarte verwalten
-      </div>
-      <div class="btn btn-outlined" routerLink="/category">
-        Messages verwalten
-      </div>
-    </div>
-  </div>
 </div>
