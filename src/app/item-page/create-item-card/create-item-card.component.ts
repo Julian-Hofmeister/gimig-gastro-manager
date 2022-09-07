@@ -21,6 +21,7 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
 
   // FORM
   createItemForm: FormGroup;
+
   fileText = 'Bild auswählen';
   selectedFile = null;
   imagePath: any;
@@ -47,6 +48,8 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
       description: new FormControl(null, Validators.required),
       price: new FormControl(null, [Validators.required]),
       imagePath: new FormControl(null, Validators.required),
+      availableOptions: new FormControl(null),
+      availableOptions2: new FormControl(null),
     });
 
     // LISTEN TO EDIT REQUEST
@@ -110,20 +113,41 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
     const isFood = this.isFood.toString() == 'true' ? true : false;
     const imagePath = this.imgURL;
     const isVisible = true;
-    const index = this.items.length + 1 ;
+    const index = this.items.length + 1;
+
+    let availableOptions = this.createItemForm.value.availableOptions;
+
+    let availableOptions2 = this.createItemForm.value.availableOptions2;
+
+    console.log(this.createItemForm.value.availableOptions.length);
+
+    try {
+      availableOptions = this.createItemForm.value.availableOptions.split(',');
+    } catch (e) {
+      availableOptions = this.createItemForm.value.availableOptions;
+    }
+
+    try {
+      availableOptions2 =
+        this.createItemForm.value.availableOptions2.split(',');
+    } catch (e) {
+      availableOptions2 = this.createItemForm.value.availableOptions2;
+    }
 
     // DEFINE ITEM
-    this.item = new Item(
+    this.item = {
       name,
       description,
       price,
       imagePath,
       isVisible,
       isFood,
-      this.id,
-      this.parentId,
+      id: this.id,
+      parentId: this.parentId,
       index,
-    );
+      availableOptions,
+      availableOptions2,
+    };
 
     // CHECK ACTION
     if (!this.isEditMode) {
@@ -168,6 +192,8 @@ export class CreateItemCardComponent implements OnInit, OnDestroy {
       description: new FormControl(item.description, Validators.required),
       price: new FormControl(item.price, [Validators.required]),
       imagePath: new FormControl(null),
+      availableOptions: new FormControl(item.availableOptions),
+      availableOptions2: new FormControl(item.availableOptions2),
     });
     this.editImage = item.imagePath;
     this.id = item.id;

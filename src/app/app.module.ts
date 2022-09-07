@@ -24,6 +24,7 @@ import { LoadingSpinnerComponent } from './elements/loading-spinner/loading-spin
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OrderPageComponent } from './order-page/order-page.component';
 import { OrderItemComponent } from './order-page/order-item/order-item.component';
+import { AccountPageComponent } from './account-page/account-page.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { OrderItemComponent } from './order-page/order-item/order-item.component
     LoadingSpinnerComponent,
     OrderPageComponent,
     OrderItemComponent,
+    AccountPageComponent,
   ],
   imports: [
     BrowserModule,

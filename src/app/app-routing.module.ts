@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AccountPageComponent } from './account-page/account-page.component';
 import { CategoryPageComponent } from './category-page/category-page.component';
 import { ElementsComponent } from './elements/elements.component';
 import { ItemPageComponent } from './item-page/item-page.component';
@@ -37,6 +38,11 @@ const appRoutes: Routes = [
   {
     path: 'orders',
     component: OrderPageComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'account',
+    component: AccountPageComponent,
     canActivate: [AuthGuard],
   },
   { path: 'elements', component: ElementsComponent },

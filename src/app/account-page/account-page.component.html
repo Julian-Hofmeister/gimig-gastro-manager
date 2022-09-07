@@ -1,0 +1,39 @@
+<app-nav-bar pageTitle="Speisekarte verwalten"></app-nav-bar>
+<app-title-element title1="Mein" title2="Account"></app-title-element>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <!-------------------------------------->
+            <h3>Hintergrundbild</h3>
+            <!-- PLACEHOLDER -->
+            <div class="img-placeholder" *ngIf="!imgURL && !editImage">
+                <span class="material-icons"> wallpaper </span>
+            </div>
+            <!-- SELECTED IMAGE -->
+            <div *ngIf="imgURL">
+                <img [src]="imgURL" />
+            </div>
+            <!-- EDIT IMAGE -->
+            <div *ngIf="!imgURL && editImage | async; let url">
+                <img [src]="url" />
+            </div>
+
+            <div class="row justify-content-between">
+                <div class="col">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="bgImage" (change)="onFileSelected($event)" />
+                        <label class="custom-file-label" for="bgImage">{{
+              fileText
+            }}</label>
+                    </div>
+                </div>
+                <div class="col right">
+                    <button class="btn" (click)="onSaveImage()">Speichern</button>
+                </div>
+            </div>
+            <!-------------------------------------->
+            <h3>Hintergrundbild</h3>
+        </div>
+    </div>
+</div>

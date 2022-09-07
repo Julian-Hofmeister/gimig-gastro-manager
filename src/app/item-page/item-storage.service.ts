@@ -36,7 +36,7 @@ export class ItemStorageService {
 
     // GETS REFERENCE
     this.itemCollection = this.path.collection('/' + pathAttachment, (ref) =>
-      ref.where('parentId', '==', id).orderBy("name")
+      ref.where('parentId', '==', id).orderBy('name')
     );
 
     // GETS ITEMS
@@ -78,6 +78,8 @@ export class ItemStorageService {
         isFood: item.isFood,
         parentId: item.parentId,
         index: item.index,
+        availableOptions: item.availableOptions,
+        availableOptions2: item.availableOptions2,
       });
     } else {
       // CATCH ERRORS
@@ -87,8 +89,12 @@ export class ItemStorageService {
 
   async updateItem(changedItem: Item, event: any, downloadUrl: string) {
     // GET REFERENCE
-    const pathAttachment = changedItem.isFood ? 'items-food' : 'items-beverages';
-    this.itemDoc = this.path.collection(pathAttachment).doc(`${changedItem.id}`);
+    const pathAttachment = changedItem.isFood
+      ? 'items-food'
+      : 'items-beverages';
+    this.itemDoc = this.path
+      .collection(pathAttachment)
+      .doc(`${changedItem.id}`);
 
     // UPDATE IMG IF CHANGED
     if (event != null) {
@@ -113,6 +119,9 @@ export class ItemStorageService {
       description: changedItem.description,
       price: changedItem.price,
       isVisible: changedItem.isVisible,
+      availableOptions: changedItem.availableOptions,
+      availableOptions2: changedItem.availableOptions2,
+
       id: changedItem.id,
     });
   }

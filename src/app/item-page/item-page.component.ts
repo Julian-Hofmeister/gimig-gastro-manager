@@ -71,17 +71,10 @@ export class ItemPageComponent implements OnInit {
               .ref(item.imagePath)
               .getDownloadURL();
 
-            const fetchedItem = new Item(
-              item.name,
-              item.description,
-              item.price,
+            const fetchedItem: Item = {
+              ...item,
               imagePath,
-              item.isVisible,
-              item.isFood,
-              item.id,
-              item.parentId,
-              item.index
-            );
+            };
 
             console.log(fetchedItem);
 

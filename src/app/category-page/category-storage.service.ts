@@ -68,8 +68,8 @@ export class DataStorageService {
     // UPLOAD IMAGE TO FIREBASE STORAGE
     let task = await this.ref.put(event.target.files[0]);
 
-    // ADD NEW CATEGORY TO FIRESTORE IF IMG UPLOAD SUCCESSFUL
     console.log(task.state);
+    // ADD NEW CATEGORY TO FIRESTORE IF IMG UPLOAD SUCCESSFUL
     if (task.state == 'success') {
       this.path.collection(pathAttachment).add({
         name: category.name,

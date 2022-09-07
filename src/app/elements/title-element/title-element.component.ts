@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Location } from '@angular/common';
 
 @Component({
@@ -7,9 +7,54 @@ import { Location } from '@angular/common';
   styleUrls: ['./title-element.component.css'],
 })
 export class TitleElementComponent {
+  //#region [ BINDINGS ] //////////////////////////////////////////////////////////////////////////
+
+  @Input() title1: string;
+  @Input() title2: string;
+
+  //#endregion
+
+  //#region [ PROPERTIES ] /////////////////////////////////////////////////////////////////////////
+
+  //#endregion
+
+  //#region [ MEMBERS ] ///////////////////////////////////////////////////////////////////////////
+
+  //#endregion
+
+  //#region [ CONSTRUCTORS ] //////////////////////////////////////////////////////////////////////
+
   constructor(private _location: Location) {}
+
+  //#endregion
+
+  //#region [ LIFECYCLE ] /////////////////////////////////////////////////////////////////////////
+
+  ngOnInit() {}
+
+  //#endregion
+
+  //#region [ EMITTER ] ///////////////////////////////////////////////////////////////////////////
+
+  //#endregion
+
+  //#region [ RECEIVER ] ///////////////////////////////////////////////////////////////////////////
+
+  //#endregion
+
+  //#region [ PUBLIC ] ////////////////////////////////////////////////////////////////////////////
 
   backClicked() {
     this._location.back();
   }
+
+  // ----------------------------------------------------------------------------------------------
+
+  //#endregion
+
+  //#region [ PRIVATE ] ///////////////////////////////////////////////////////////////////////////
+
+  // ----------------------------------------------------------------------------------------------
+
+  //#endregion
 }
