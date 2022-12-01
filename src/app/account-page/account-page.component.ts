@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ImageService } from '../shared/image.service';
 import { AccountService } from './account.service';
 
 @Component({
@@ -13,12 +14,13 @@ export class AccountPageComponent implements OnInit {
 
   //#region [ PROPERTIES ] /////////////////////////////////////////////////////////////////////////
 
-  fileText = 'Bild auswählen';
+  bgImageText = 'Bild auswählen';
+  bgUrl: any;
+
   selectedFile = null;
   imagePath: any;
-  imgURL: any;
   id: string;
-  uploadFile: any;
+  bgImage: any;
 
   // EDIT MODE
   isEditMode = false;
@@ -33,7 +35,10 @@ export class AccountPageComponent implements OnInit {
 
   //#region [ CONSTRUCTORS ] //////////////////////////////////////////////////////////////////////
 
-  constructor(private accountService: AccountService) {}
+  constructor(
+    private accountService: AccountService,
+    private imageService: ImageService
+  ) {}
 
   //#endregion
 
@@ -54,54 +59,60 @@ export class AccountPageComponent implements OnInit {
   //#region [ PUBLIC ] ////////////////////////////////////////////////////////////////////////////
 
   onFileSelected(event: any) {
-    this.uploadFile = event;
+    // this.selectedFile = event.target.files[0];
+    // var files = event.target.files;
 
-    this.selectedFile = event.target.files[0];
-    var files = event.target.files;
+    // // CHECK FILE SIZE
+    // const fileSize = Math.round(this.selectedFile.size / 1000);
 
-    // CHECK FILE SIZE
-    const fileSize = Math.round(this.selectedFile.size / 1000);
+    // if (fileSize > 2000) {
+    //   window.confirm(
+    //     'Die Datei ist zu groß. (' +
+    //       fileSize +
+    //       'kb)\nDie maximale Dateigröße liegt bei 900kb.'
+    //   );
+    //   return;
+    // }
 
-    if (fileSize > 2000) {
-      window.confirm(
-        'Die Datei ist zu groß. (' +
-          fileSize +
-          'kb)\nDie maximale Dateigröße liegt bei 900kb.'
-      );
-      return;
-    }
+    // // CHECK EMPTY
+    // if (files.length === 0) return;
 
-    // CHECK EMPTY
-    if (files.length === 0) return;
+    // // CHECK FILE TYPE
+    // var mimeType = files[0].type;
 
-    // CHECK FILE TYPE
-    var mimeType = files[0].type;
+    // if (mimeType.match(/image\/*/) == null) {
+    //   window.confirm(
+    //     'Die Datei kann nicht als Bild erkannt werden. Bitte verwenden sie nur gängige Dateiformate'
+    //   );
+    //   return;
+    // }
 
-    if (mimeType.match(/image\/*/) == null) {
-      window.confirm(
-        'Die Datei kann nicht als Bild erkannt werden. Bitte verwenden sie nur gängige Dateiformate'
-      );
-      return;
-    }
+    // // SET FILE NAME AS TEXT
+    // this.fileText = this.selectedFile.name;
 
-    // SET FILE NAME AS TEXT
-    this.fileText = this.selectedFile.name;
+    // // SET FILE
+    // var reader = new FileReader();
+    // this.imagePath = files;
 
-    // SET FILE
-    var reader = new FileReader();
-    this.imagePath = files;
+    // reader.readAsDataURL(files[0]);
+    // reader.onload = (_event) => {
+    //   this.imgURL = reader.result;
+    // };
 
-    reader.readAsDataURL(files[0]);
-    reader.onload = (_event) => {
-      this.imgURL = reader.result;
-    };
+    this.bgImage = event;
+
+    this.bgImageText = event.target.files[0].name;
+
+    this.bgUrl = this.imageService.selectImage(event);
+
+    console.log(this.bgUrl);
   }
 
   onSaveImage() {
-    const imagePath = this.imgURL;
+    // const imagePath = this.imgURL;
 
     if (!this.isEditMode) {
-      this.accountService.addBackgroundImage(this.uploadFile);
+      this.accountService.addBackgroundImage(this.bgImage);
     }
   }
   // ----------------------------------------------------------------------------------------------
